@@ -202,7 +202,7 @@ function Pong(varName)
 			this.temp = this.container.innerHTML;
 			this.showingMessage = true;
 		}
-		this.container.innerHTML = '<br /><br /><div id="pong_msg"><div class="pong_title">PONG</div><div class="pong_title2">'+title+'</div><div id="pong_msgtxt">'+msg+'</div><div class="pong_menu"><a href="javascript:'+this.varName+'.HideMessage()">&raquo; Back to game</a></div></div>';
+		this.container.innerHTML = '<br /><br /><div id="pong_msg"><h2>PONG</h2><h3>'+title+'</h3><div id="pong_msgtxt">'+msg+'</div><div><a href="javascript:'+this.varName+'.HideMessage()">&raquo; Back to game</a></div></div>';
 	};
 	this.HideMessage = function()
 	{
