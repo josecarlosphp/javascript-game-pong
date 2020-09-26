@@ -4,10 +4,6 @@
  * @license    GNU General Public License version 3
  *             https://opensource.org/licenses/GPL-3.0
  */
-
-var pongGame = new Pong();
-pongGame.Run();
-
 function Pong(varName)
 {
 	this.varName = varName ? varName : "pongGame";
