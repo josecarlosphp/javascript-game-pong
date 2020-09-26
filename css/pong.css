@@ -1,0 +1,24 @@
+/**
+ * @author     José Carlos PHP
+ *             https://josecarlosphp.com
+ * @license    GNU General Public License version 3
+ *             https://opensource.org/licenses/GPL-3.0
+ */
+.pong_game{background:#ffffff;color:#000000}
+.pong_titulo{font-weight:bold;font-size:12pt}
+.pong_titulo2{font-weight:bold;font-size:10pt}
+.pong_menu a{color:#0000ff}
+.pong_th{border-bottom:1px solid #000000}
+.pong_mini,#scoregoalsgame{font-size:75%}
+span.pong_score{font-weight:bold}
+div.pong_score{font-size:12pt;text-align:right}
+#pong_header{margin:0px auto;width:600px;text-align:left;background:#ffffff;color:#000000}
+#pong_menu{background:#e0e0e0}
+#pong_menu td{font-size:10pt}
+#contenedor{margin:0px auto;background:#000000;width:600px;height:400px;text-align:left}
+#pong_mensaje{margin:0px auto;width:400px;height:300px;background:#e0e0e0;color:#000000}
+#pong_mensajetxt{margin:10px auto;color:#000000}
+#pluck{position:relative;top:0px;left:0px;background:#ffffff;width:10px;height:10px;font-size:1px}
+#paddleL{position:relative;top:175px;left:40px;background:#ffffff;width:10px;height:50px;font-size:1px}
+#paddleR{position:relative;top:125px;left:550px;background:#ffffff;width:10px;height:50px;font-size:1px}
+#pong_footer{margin:0px auto;width:600px;text-align:center;background:#e0e0e0;color:#000000;font-size:12pt}
