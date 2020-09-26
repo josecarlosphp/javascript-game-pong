@@ -16,83 +16,77 @@ function Pong(varName)
 	this.server = '';
 	this.paused = false;
 	this.temp = '';
-	this.contenedor = document.getElementById('contenedor');
+	this.container = document.getElementById('container');
 	this.showingMessage = false;
 	this.Run = function()
 	{
-		document.onkeydown = function(evt)
-			{
-				if(!evt)
-				{
-					var evt = window.event;
-				}
-				var key = window.Event ? evt.which : evt.keyCode;
+		document.onkeydown = function(evt){
+			if(!evt){
+                var evt = window.event;
+            }
+            var key = window.Event ? evt.which : evt.keyCode;
 
-				//No podemos utilizar this. porque este método será llamado onkeydown del documento
-				var varName = document.getElementById('contenedor').name;
+            //No podemos utilizar this. porque este método será llamado onkeydown del documento
+            var varName = document.getElementById('container').name;
 
-				switch(key)
-				{
-					case 87: //W
-						eval(varName+".paddleL.MoveUp()");
-						break;
-					case 83: //S
-						eval(varName+".paddleL.MoveDown()");
-						break;
-					case 79: //O
-						eval(varName+".paddleR.MoveUp()");
-						break;
-					case 76: //L
-						eval(varName+".paddleR.MoveDown()");
-						break;
-					case 80: //P
-						eval(varName+".SwitchPause()");
-						break;
-					case 81: //Q
-						eval(varName+".Serves('L')");
-						break;
-					case 73: //I
-						eval(varName+".Serves('R')");
-						break;
-					default:
-						//alert(key);
-				}
-			}
-		document.onkeyup = function(evt)
-			{
-				if(!evt)
-				{
-					var evt = window.event;
-				}
-				var key = window.Event ? evt.which : evt.keyCode;
+            switch(key){
+                case 87: //W
+                    eval(varName+".paddleL.MoveUp()");
+                    break;
+                case 83: //S
+                    eval(varName+".paddleL.MoveDown()");
+                    break;
+                case 79: //O
+                    eval(varName+".paddleR.MoveUp()");
+                    break;
+                case 76: //L
+                    eval(varName+".paddleR.MoveDown()");
+                    break;
+                case 80: //P
+                    eval(varName+".SwitchPause()");
+                    break;
+                case 81: //Q
+                    eval(varName+".Serves('L')");
+                    break;
+                case 73: //I
+                    eval(varName+".Serves('R')");
+                    break;
+                default:
+                    //alert(key);
+            }
+		}
 
-				//No podemos utilizar this. porque este método será llamado onkeydown del documento
-				var varName = document.getElementById('contenedor').name;
+		document.onkeyup = function(evt){
+            if(!evt){
+                var evt = window.event;
+            }
+            var key = window.Event ? evt.which : evt.keyCode;
 
-				switch(key)
-				{
-					case 87: //W
-					case 83: //S
-						eval(varName+".paddleL.Stop()");
-						break;
-					case 79: //O
-					case 76: //L
-						eval(varName+".paddleR.Stop()");
-						break;
-				}
-			}
-		this.contenedor.name = this.varName;
+            //No podemos utilizar this. porque este método será llamado onkeydown del documento
+            var varName = document.getElementById('container').name;
+
+            switch(key){
+                case 87: //W
+                case 83: //S
+                    eval(varName+".paddleL.Stop()");
+                    break;
+                case 79: //O
+                case 76: //L
+                    eval(varName+".paddleR.Stop()");
+                    break;
+            }
+		}
+
+		this.container.name = this.varName;
 		document.getElementById('pong_menu').innerHTML = '<table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="javascript:'+this.varName+'.HowToPlay()">&raquo; How to play</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:'+this.varName+'.Settings()">&raquo; Settings</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:'+this.varName+'.Credits()">&raquo; Credits</a></td><td><div class="pong_score">Score: <span id="pong_scoreL" class="pong_score">0</span> - <span id="pong_scoreR" class="pong_score">0</span> <span class="pong_mini">(reach </span><span id="scoregoalsgame">15</span><span class="mini"> goals to win a game)</span></div></td></tr></table>';
 		this.newGame();
 		this.running();
-	}
+	};
 	this.running = function()
 	{
-		if(!this.paused)
-		{
+		if(!this.paused){
 			var r = this.pluck.Move();
-			switch(r)
-			{
+			switch(r){
 				case "L":
 				case "R":
 					this.goal(r);
@@ -102,22 +96,18 @@ function Pong(varName)
 			this.paddleR.Move();
 		}
 		setTimeout(this.varName+".running()", 10);
-	}
+	};
 	this.SwitchPause = function(pause)
 	{
-		if(this.paused = pause == null ? !this.paused : pause)
-		{
+		if(this.paused = pause == null ? !this.paused : pause){
 			this.statusMessage("Game paused (press P to continue)");
-		}
-		else
-		{
+		}else{
 			this.statusMessage();
 		}
-	}
+	};
 	this.goal = function(goaler)
 	{
-		switch(goaler)
-		{
+		switch(goaler){
 			case 'L':
 				var pNum = '1';
 				var pStr = 'left';
@@ -129,26 +119,21 @@ function Pong(varName)
 		}
 		this.statusMessage('Player '+pNum+' scores!!');
 		eval('this.score'+goaler+'.goals++');
-		if(eval('this.score'+goaler+'.goals') >= this.gamegoals)
-		{
+		if(eval('this.score'+goaler+'.goals') >= this.gamegoals){
 			this.statusMessage('Player '+pNum+' ('+pStr+') wins the game '+this.scoreL.goals+' to '+this.scoreR.goals);
 			eval('this.score'+goaler+'.games++');
 			this.newGame(goaler);
-		}
-		else
-		{
+		}else{
 			this.newPoint(goaler == 'L' ? 'R' : 'L');
 		}
 		this.RefreshScore();
-	}
+	};
 	this.newPoint = function(server)
 	{
-		if(server == null)
-		{
+		if(server == null){
 			server = Math.round(Math.random()) ? 'L' : 'R';
 		}
-		switch(server)
-		{
+		switch(server){
 			case 'L':
 				this.statusMessage('Player 1 serves (press Q)', true);
 				this.pluck.X = 60;
@@ -162,22 +147,21 @@ function Pong(varName)
 		this.pluck.Stop();
 		this.pluck.Position();
 		this.server = server;
-	}
+	};
 	this.newGame = function(server)
 	{
 		this.scoreL.goals = 0;
 		this.scoreR.goals = 0;
 		this.newPoint(server);
-	}
+	};
 	this.Serves = function(server)
 	{
-		if(!this.paused && server == this.server)
-		{
+		if(!this.paused && server == this.server){
 			this.server = '';
 			this.pluck.incX = server == 'L' ? -5 : 5;
 			this.statusMessage();
 		}
-	}
+	};
 	this.HowToPlay = function()
 	{
 		var msg = '<table>';
@@ -190,7 +174,7 @@ function Pong(varName)
 		msg += '<p>Depending where the pluck touch your paddle, it will affect its moving one way or another.</p>';
 		msg += '<p>Enjoy!!</p>';
 		this.ShowMessage(msg,'How to play');
-	}
+	};
 	this.Settings = function()
 	{
 		var msg = '<table>';
@@ -200,7 +184,7 @@ function Pong(varName)
 		this.ShowMessage(msg,'Settings');
 		document.getElementById('pluckvelocity').value = this.pluck.advance;
 		document.getElementById('gamegoals').value = this.gamegoals;
-	}
+	};
 	this.Credits = function()
 	{
 		var msg = '<table>';
@@ -210,41 +194,39 @@ function Pong(varName)
 		msg += '<tr><td><a href="http://programadorphpfreelance.com" title="Web developer / PHP programmer freelance Homepage">http://programadorphpfreelance.com</a></td></tr>';
 		msg += '</table>';
 		this.ShowMessage(msg,'Credits');
-	}
-	this.ShowMessage = function(msg,titulo)
+	};
+	this.ShowMessage = function(msg,title)
 	{
 		this.paused = true;
-		if(!this.showingMessage)
-		{
-			this.temp = this.contenedor.innerHTML;
+		if(!this.showingMessage){
+			this.temp = this.container.innerHTML;
 			this.showingMessage = true;
 		}
-		this.contenedor.innerHTML = '<br /><br /><div id="pong_mensaje"><div class="pong_titulo">PONG</div><div class="pong_titulo2">'+titulo+'</div><div id="pong_mensajetxt">'+msg+'</div><div class="pong_menu"><a href="javascript:'+this.varName+'.HideMessage()">&raquo; Back to game</a></div></div>';
-	}
+		this.container.innerHTML = '<br /><br /><div id="pong_msg"><div class="pong_title">PONG</div><div class="pong_title2">'+title+'</div><div id="pong_msgtxt">'+msg+'</div><div class="pong_menu"><a href="javascript:'+this.varName+'.HideMessage()">&raquo; Back to game</a></div></div>';
+	};
 	this.HideMessage = function()
 	{
-		this.contenedor.innerHTML = this.temp;
+		this.container.innerHTML = this.temp;
 		this.temp = '';
 		this.showingMessage = false;
 		this.paused = false;
-	}
+	};
 	this.statusMessage = function(msg, add)
 	{
-		if(add)
-		{
+		if(add){
 			document.getElementById('pong_footer').innerHTML += ('&nbsp;&nbsp;&nbsp;' + (msg == null ? '&nbsp;' : msg));
 		}
-		else
-		{
+		else{
 			document.getElementById('pong_footer').innerHTML = msg == null ? '&nbsp;' : msg;
 		}
-	}
+	};
 	this.RefreshScore = function()
 	{
 		document.getElementById('pong_scoreL').innerHTML = this.scoreL.goals;
 		document.getElementById('pong_scoreR').innerHTML = this.scoreR.goals;
-	}
+	};
 }
+
 function Pluck(pong)
 {
 	this.pong = pong;
@@ -256,28 +238,23 @@ function Pluck(pong)
 
 	this.Move = function()
 	{
-		if(this.Y < 1 || this.Y > 390)
-		{
+		if(this.Y < 1 || this.Y > 390){
 			this.incY = -this.incY;
 		}
-		if(this.X < 1)
-		{
+		if(this.X < 1){
 			this.incX = this.advance;
 			return "R";
 		}
-		if(this.X > 590)
-		{
+		if(this.X > 590){
 			this.incX = -this.advance;
 			return "L";
 		}
-		if(this.X > 35 && this.X < 50 && this.Y > this.pong.paddleL.Y-10 && this.Y < this.pong.paddleL.Y+65)
-		{
+		if(this.X > 35 && this.X < 50 && this.Y > this.pong.paddleL.Y-10 && this.Y < this.pong.paddleL.Y+65){
 			var varIncY = this.calculateVarIncY(this.Y - (this.pong.paddleL.Y-10));
 			this.incX = this.incY == 0 && varIncY == 0 ? 2*this.advance : this.advance;
 			this.incY += varIncY;
 		}
-		if(this.X > 540 && this.X < 555 && this.Y > this.pong.paddleR.Y+40 && this.Y < this.pong.paddleR.Y+115)
-		{
+		if(this.X > 540 && this.X < 555 && this.Y > this.pong.paddleR.Y+40 && this.Y < this.pong.paddleR.Y+115){
 			var varIncY = this.calculateVarIncY(this.Y - (this.pong.paddleR.Y+40));
 			this.incX = this.incY == 0 && varIncY == 0 ? -2*this.advance : -this.advance;
 			this.incY += varIncY;
@@ -286,7 +263,7 @@ function Pluck(pong)
 		this.Y += this.incY;
 		this.Position();
 		return "";
-	}
+	};
 	this.calculateVarIncY = function(diff)
 	{
 		if(diff < 11) return -3;
@@ -296,32 +273,34 @@ function Pluck(pong)
 		if(diff < 56) return 1;
 		if(diff < 66) return 2;
 		return 3;
-	}
+	};
 	this.Stop = function()
 	{
 		this.incX = 0;
 		this.incY = 0;
-	}
+	};
 	this.Position = function(x,y)
 	{
-		if(x != null) this.X = x;
-		if(y != null) this.Y = y;
+		if(x != null){
+            this.X = x;
+        }
+		if(y != null){
+            this.Y = y;
+        }
 		document.getElementById("pluck").style.left = this.X+"px";
 		document.getElementById("pluck").style.top = this.Y+"px";
-	}
+	};
 }
+
 function Paddle(LorR)
 {
 	this.incY = 0;
-	if(LorR == "L")
-	{
+	if(LorR == "L"){
 		this.LorR = "L";
 		this.minY = -1;
 		this.maxY = 330;
 		this.Y = 165;
-	}
-	else
-	{
+	}else{
 		this.LorR = "R";
 		this.minY = -51;
 		this.maxY = 280;
@@ -332,29 +311,27 @@ function Paddle(LorR)
 	{
 		this.incY = -10;
 		this.Move();
-	}
+	};
 	this.MoveDown = function()
 	{
 		this.incY = 10;
 		this.Move();
-	}
+	};
 	this.Move = function()
 	{
-		if((this.incY < 0 && this.Y < this.minY) || (this.incY > 0 && this.Y > this.maxY))
-		{
+		if((this.incY < 0 && this.Y < this.minY) || (this.incY > 0 && this.Y > this.maxY)){
 			this.Stop();
-		}
-		else
-		{
+		}else{
 			this.Y += this.incY;
 			document.getElementById("paddle"+this.LorR).style.top = this.Y+"px";
 		}
-	}
+	};
 	this.Stop = function()
 	{
 		this.incY = 0;
-	}
+	};
 }
+
 function Score()
 {
 	this.goals = 0;
