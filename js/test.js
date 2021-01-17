@@ -3,6 +3,8 @@
  *             https://josecarlosphp.com
  * @license    GNU General Public License version 3
  *             https://opensource.org/licenses/GPL-3.0
+ * @param divId string
+ * @param varName string
  */
 function PongGame(divId, varName)
 {
