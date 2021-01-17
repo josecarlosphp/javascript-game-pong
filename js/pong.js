@@ -4,22 +4,83 @@
  * @license    GNU General Public License version 3
  *             https://opensource.org/licenses/GPL-3.0
  */
-function Pong(varName)
+function PongGame(varName, divId)
 {
-	this.varName = varName ? varName : "pongGame";
+	this.varName = varName ? varName : 'pongGame';
+    this.divId = divId ? divId : 'pong_game';
 	this.pluck = new Pluck(this);
-	this.paddleL = new Paddle("L");
-	this.paddleR = new Paddle("R");
+	this.paddleL = new Paddle('L');
+	this.paddleR = new Paddle('R');
 	this.scoreL = new Score();
 	this.scoreR = new Score();
 	this.gamegoals = 15;
 	this.server = '';
 	this.paused = false;
 	this.temp = '';
-	this.container = document.getElementById('container');
+	this.elements = {container:null, paddleL:null, paddleR:null, pluck:null};
 	this.showingMessage = false;
+    this.x = 0;
+    this.y = 0;
+    this.w = 0;
+    this.h = 0;
+
+    this.Create = function(id, html){
+        var e = document.createElement('div');
+        e.id = id;
+        if(html){
+            e.innerHTML = html;
+        }
+
+        return e;
+    };
+    this.Init = function()
+    {
+        this.elements.container = this.Create('container');
+        this.elements.paddleL = this.Create('paddleL');
+        this.elements.paddleR = this.Create('paddleR');
+        this.elements.pluck = this.Create('pluck');
+
+        this.elements.container.appendChild(this.elements.paddleL);
+        this.elements.container.appendChild(this.elements.paddleR);
+        this.elements.container.appendChild(this.elements.pluck);
+
+        document.getElementById(this.divId).appendChild(this.Create('pong_header'));
+        document.getElementById('pong_header').appendChild(this.Create('pong_menu', '<table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="javascript:'+this.varName+'.HowToPlay()">&raquo; How to play</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:'+this.varName+'.Settings()">&raquo; Settings</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:'+this.varName+'.Credits()">&raquo; Credits</a></td><td><div class="pong_score">Score: <span id="pong_scoreL" class="pong_score">0</span> - <span id="pong_scoreR" class="pong_score">0</span> <span class="pong_mini">(reach </span><span id="scoregoalsgame">15</span><span class="pong_mini"> goals to win a game)</span></div></td></tr></table>'));
+        document.getElementById(this.divId).appendChild(this.elements.container);
+
+        this.elements.container.appendChild(this.Create('pong_footer'));
+
+        this.elements.container.name = this.varName;
+    };
+    this.Resize = function()
+    {
+        var domRect = document.getElementById('container').getBoundingClientRect();
+
+        this.x = Math.round(domRect.left);
+        this.y = Math.round(domRect.bottom);
+        this.w = Math.round(domRect.width);
+        this.h = Math.round(domRect.height);
+
+        this.elements.paddleL.style.width = Math.round(this.w / 60) + 'px';
+        this.elements.paddleR.style.width = Math.round(this.w / 60) + 'px';
+
+        this.elements.paddleL.style.height = Math.round(this.h * 5 / 40) + 'px';
+        this.elements.paddleR.style.height = Math.round(this.h * 5 / 40) + 'px';
+
+        this.elements.paddleL.style.left = Math.round(this.w * 4 / 60) + 'px';
+        this.elements.paddleR.style.left = Math.round(this.w * 55 / 60) + 'px';
+
+        this.elements.pluck.style.width = Math.round(this.w / 60) + 'px';
+        this.elements.pluck.style.height = Math.round(this.w / 60) + 'px';
+
+        this.paddleL.maxY = h - this.elements.paddleL.offsetHeight;
+        this.paddleR.maxY = h - this.elements.paddleR.offsetHeight;
+    };
 	this.Run = function()
 	{
+        this.paddleL.Y = this.h / 2;
+        this.paddleR.Y = this.h / 2;
+
 		document.onkeydown = function(evt){
 			if(!evt){
                 var evt = window.event;
@@ -31,30 +92,30 @@ function Pong(varName)
 
             switch(key){
                 case 87: //W
-                    eval(varName+".paddleL.MoveUp()");
+                    eval(varName+'.paddleL.MoveUp();');
                     break;
                 case 83: //S
-                    eval(varName+".paddleL.MoveDown()");
+                    eval(varName+'.paddleL.MoveDown();');
                     break;
                 case 79: //O
-                    eval(varName+".paddleR.MoveUp()");
+                    eval(varName+'.paddleR.MoveUp();');
                     break;
                 case 76: //L
-                    eval(varName+".paddleR.MoveDown()");
+                    eval(varName+'.paddleR.MoveDown();');
                     break;
                 case 80: //P
-                    eval(varName+".SwitchPause()");
+                    eval(varName+'.SwitchPause();');
                     break;
                 case 81: //Q
-                    eval(varName+".Serves('L')");
+                    eval(varName+'.Serves(\'L\');');
                     break;
                 case 73: //I
-                    eval(varName+".Serves('R')");
+                    eval(varName+'.Serves(\'R\');');
                     break;
                 default:
                     //alert(key);
             }
-		}
+		};
 
 		document.onkeyup = function(evt){
             if(!evt){
@@ -68,17 +129,15 @@ function Pong(varName)
             switch(key){
                 case 87: //W
                 case 83: //S
-                    eval(varName+".paddleL.Stop()");
+                    eval(varName+'.paddleL.Stop()');
                     break;
                 case 79: //O
                 case 76: //L
-                    eval(varName+".paddleR.Stop()");
+                    eval(varName+'.paddleR.Stop()');
                     break;
             }
-		}
+		};
 
-		this.container.name = this.varName;
-		document.getElementById('pong_menu').innerHTML = '<table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="javascript:'+this.varName+'.HowToPlay()">&raquo; How to play</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:'+this.varName+'.Settings()">&raquo; Settings</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:'+this.varName+'.Credits()">&raquo; Credits</a></td><td><div class="pong_score">Score: <span id="pong_scoreL" class="pong_score">0</span> - <span id="pong_scoreR" class="pong_score">0</span> <span class="pong_mini">(reach </span><span id="scoregoalsgame">15</span><span class="mini"> goals to win a game)</span></div></td></tr></table>';
 		this.newGame();
 		this.running();
 	};
@@ -87,20 +146,20 @@ function Pong(varName)
 		if(!this.paused){
 			var r = this.pluck.Move();
 			switch(r){
-				case "L":
-				case "R":
+				case 'L':
+				case 'R':
 					this.goal(r);
 					break;
 			}
 			this.paddleL.Move();
 			this.paddleR.Move();
 		}
-		setTimeout(this.varName+".running()", 10);
+		setTimeout(this.varName+'.running()', 10);
 	};
 	this.SwitchPause = function(pause)
 	{
 		if(this.paused = pause == null ? !this.paused : pause){
-			this.statusMessage("Game paused (press P to continue)");
+			this.statusMessage('Game paused (press P to continue)');
 		}else{
 			this.statusMessage();
 		}
@@ -199,14 +258,14 @@ function Pong(varName)
 	{
 		this.paused = true;
 		if(!this.showingMessage){
-			this.temp = this.container.innerHTML;
+			this.temp = this.elements.container.innerHTML;
 			this.showingMessage = true;
 		}
-		this.container.innerHTML = '<br /><br /><div id="pong_msg"><h2>PONG</h2><h3>'+title+'</h3><div id="pong_msgtxt">'+msg+'</div><div><a href="javascript:'+this.varName+'.HideMessage()">&raquo; Back to game</a></div></div>';
+		this.elements.container.innerHTML = '<div id="pong_msg"><h2>PONG</h2><h3>'+title+'</h3><div id="pong_msgtxt">'+msg+'</div><div><a href="javascript:'+this.varName+'.HideMessage()">&raquo; Back to game</a></div></div>';
 	};
 	this.HideMessage = function()
 	{
-		this.container.innerHTML = this.temp;
+		this.elements.container.innerHTML = this.temp;
 		this.temp = '';
 		this.showingMessage = false;
 		this.paused = false;
@@ -243,11 +302,11 @@ function Pluck(pong)
 		}
 		if(this.X < 1){
 			this.incX = this.advance;
-			return "R";
+			return 'R';
 		}
 		if(this.X > 590){
 			this.incX = -this.advance;
-			return "L";
+			return 'L';
 		}
 		if(this.X > 35 && this.X < 50 && this.Y > this.pong.paddleL.Y-10 && this.Y < this.pong.paddleL.Y+65){
 			var varIncY = this.calculateVarIncY(this.Y - (this.pong.paddleL.Y-10));
@@ -262,7 +321,7 @@ function Pluck(pong)
 		this.X += this.incX;
 		this.Y += this.incY;
 		this.Position();
-		return "";
+		return '';
 	};
 	this.calculateVarIncY = function(diff)
 	{
@@ -279,7 +338,7 @@ function Pluck(pong)
 		this.incX = 0;
 		this.incY = 0;
 	};
-	this.Position = function(x,y)
+	this.Position = function(x, y)
 	{
 		if(x != null){
             this.X = x;
@@ -287,34 +346,28 @@ function Pluck(pong)
 		if(y != null){
             this.Y = y;
         }
-		document.getElementById("pluck").style.left = this.X+"px";
-		document.getElementById("pluck").style.top = this.Y+"px";
+		document.getElementById('pluck').style.left = this.X + 'px';
+		document.getElementById('pluck').style.top = this.Y + 'px';
 	};
 }
 
 function Paddle(LorR)
 {
+    this.LorR = LorR;
+    this.Y = 0;
+    this.minY = 0;
 	this.incY = 0;
-	if(LorR == "L"){
-		this.LorR = "L";
-		this.minY = -1;
-		this.maxY = 330;
-		this.Y = 165;
-	}else{
-		this.LorR = "R";
-		this.minY = -51;
-		this.maxY = 280;
-		this.Y = 115;
-	}
+    this.maxY = 0;
+	this.maxY = 0;
 
 	this.MoveUp = function()
 	{
-		this.incY = -10;
+		this.incY = 5;
 		this.Move();
 	};
 	this.MoveDown = function()
 	{
-		this.incY = 10;
+		this.incY = -5;
 		this.Move();
 	};
 	this.Move = function()
@@ -323,7 +376,7 @@ function Paddle(LorR)
 			this.Stop();
 		}else{
 			this.Y += this.incY;
-			document.getElementById("paddle"+this.LorR).style.top = this.Y+"px";
+			document.getElementById('paddle'+this.LorR).style.bottom = this.Y + 'px';
 		}
 	};
 	this.Stop = function()

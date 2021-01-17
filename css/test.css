@@ -1,0 +1,8 @@
+/**
+ * @author     José Carlos PHP
+ *             https://josecarlosphp.com
+ * @license    GNU General Public License version 3
+ *             https://opensource.org/licenses/GPL-3.0
+ */
+html,body{height:100%;margin:0px;padding:0px;background:#c0c0c0}
+#pong_game{font-family:'VT323',monospace;width:100%;height:100%;margin:0 auto}
